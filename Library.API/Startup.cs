@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Library.API.Entities;
+using Library.API.Services;
 
 namespace Library.API
 {
@@ -26,6 +27,9 @@ namespace Library.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LibraryContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
+
+            //bağımlılığımızı ekliyoruz.
+            services.AddScoped<ILabraryRepository, LibraryRepository>();
             // Add framework services.
             services.AddMvc();
         }
