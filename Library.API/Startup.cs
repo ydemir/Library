@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Library.API.Entities;
 using Library.API.Services;
 using Library.API.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace Library.API
 {
@@ -40,6 +41,22 @@ namespace Library.API
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler(appbuilder=>
+                {
+                    appbuilder.Run(async context=>
+                    {
+                        context.Response.StatusCode = 500;
+                        await context.Response.WriteAsync("An unexpected fault happened Try again later");
+                    });
+                });
+            }
 
             AutoMapper.Mapper.Initialize(cfg =>
             {

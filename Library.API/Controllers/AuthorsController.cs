@@ -23,25 +23,12 @@ namespace Library.API.Controllers
         [HttpGet()]
         public IActionResult GetAuthors()
         {
+
             var authorsFromRepo = _libraryRepository.GetAuthors();
-
-            //var authors = new List<AuthorDto>();
-
-            ////Çok fazla propery veya collection bulunan sınıflar için automap kullanılması önerilmektedir.
-
-            //foreach (var author in authorsFromRepo)
-            //{
-            //    authors.Add(new AuthorDto()
-            //    {
-            //        Id = author.Id,
-            //        Name = $"{author.FirstName}{author.LastName}",
-            //        Genre = author.Genre,
-            //        Age = author.DateOfBirth.GetCurrentAge()
-            //    });
-            //}
 
             var authors = Mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo);
             return Ok(authors);
+
         }
 
         [HttpGet("{Id}")]
