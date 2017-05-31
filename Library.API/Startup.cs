@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Library.API.Entities;
 using Library.API.Services;
+using Library.API.Helpers;
 
 namespace Library.API
 {
@@ -35,11 +36,19 @@ namespace Library.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,LibraryContext libraryContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, LibraryContext libraryContext)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Entities.Author, Model.AuthorDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
+                     $"{src.FirstName}{src.LastName}"))
+                .ForMember(dest => dest.Age, opt => opt.MapFrom(src =>
+                     src.DateOfBirth.GetCurrentAge()));
+            });
             libraryContext.EnsureSeedDataForContext();
             app.UseMvc();
         }
