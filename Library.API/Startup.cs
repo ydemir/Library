@@ -8,6 +8,7 @@ using Library.API.Entities;
 using Library.API.Services;
 using Library.API.Helpers;
 using Microsoft.AspNetCore.Http;
+using Library.API.Model;
 
 namespace Library.API
 {
@@ -65,7 +66,13 @@ namespace Library.API
                      $"{src.FirstName}{src.LastName}"))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src =>
                      src.DateOfBirth.GetCurrentAge()));
+
+                cfg.CreateMap<Book, BookDto>();
             });
+
+
+
+
             libraryContext.EnsureSeedDataForContext();
             app.UseMvc();
         }
