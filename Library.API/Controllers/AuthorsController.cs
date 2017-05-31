@@ -43,5 +43,13 @@ namespace Library.API.Controllers
             var authors = Mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo);
             return new JsonResult(authors);
         }
+
+        [HttpGet("{Id}")]
+        public IActionResult GetAuthor(Guid id)
+        {
+            var authorFromRepo = _libraryRepository.GetAuthor(id);
+            var author = Mapper.Map<AuthorDto>(authorFromRepo);
+            return new JsonResult(author);
+        }
     }
 }
