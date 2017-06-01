@@ -9,6 +9,7 @@ using Library.API.Services;
 using Library.API.Helpers;
 using Microsoft.AspNetCore.Http;
 using Library.API.Model;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Library.API
 {
@@ -34,7 +35,13 @@ namespace Library.API
             //bağımlılığımızı ekliyoruz.
             services.AddScoped<ILabraryRepository, LibraryRepository>();
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(setupAction=>
+            {
+                //serviste açtığımız method json destekliyorsa xml olarak talep edilen isteklere 406 not acceptable hatası verir
+                setupAction.ReturnHttpNotAcceptable = true;
+                //xml olarak format belirtlemek istiyorsak nuget ten aşağıdaki referans için paket indirmemiz gerekiyor
+                setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
