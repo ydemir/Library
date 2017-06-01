@@ -8,7 +8,7 @@ using Library.API.Entities;
 using Library.API.Services;
 using Library.API.Helpers;
 using Microsoft.AspNetCore.Http;
-using Library.API.Model;
+using Library.API.Models;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Library.API
@@ -68,13 +68,15 @@ namespace Library.API
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<Entities.Author, Model.AuthorDto>()
+                cfg.CreateMap<Entities.Author, Models.AuthorDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
                      $"{src.FirstName}{src.LastName}"))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src =>
                      src.DateOfBirth.GetCurrentAge()));
 
                 cfg.CreateMap<Book, BookDto>();
+
+                cfg.CreateMap<AuthorForCreationDto, Author>();
             });
 
 

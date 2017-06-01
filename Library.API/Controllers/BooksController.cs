@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Library.API.Services;
 using AutoMapper;
-using Library.API.Model;
+using Library.API.Models;
 
 namespace Library.API.Controllers
 {

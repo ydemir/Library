@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Library.API.Helpers;
-using Library.API.Model;
+using Library.API.Entities;
+using Library.API.Models;
 using Library.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Library.API.Controllers
 {
@@ -31,7 +29,7 @@ namespace Library.API.Controllers
 
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{Id}",Name ="GetAuthor")]
         public IActionResult GetAuthor(Guid id)
         {
           
@@ -42,6 +40,27 @@ namespace Library.API.Controllers
             }
             var author = Mapper.Map<AuthorDto>(authorFromRepo);
             return Ok(author);
+        }
+        [HttpPost]
+        public IActionResult CreateAuthor([FromBody] AuthorForCreationDto author)
+        {
+            if (author==null)
+            {
+                return BadRequest(); 
+            }
+            var authorEntity = Mapper.Map<Author>(author);
+
+            _libraryRepository.AddAuthor(authorEntity);
+            if (!_libraryRepository.Save())
+            {
+                return StatusCode(500, "A problem happened with handling your request.");
+            }
+
+            var authorToReturn = Mapper.Map<AuthorDto>(authorEntity);
+
+            return CreatedAtRoute("GetAuthor",
+                new { id = authorToReturn.Id },
+                authorToReturn);
         }
     }
 }
