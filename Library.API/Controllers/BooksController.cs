@@ -66,7 +66,7 @@ namespace Library.API.Controllers
 
             _libraryRepository.AddBookForAuthor(authorId, bookEntity);
 
-            if (_libraryRepository.Save())
+            if (!_libraryRepository.Save())
             {
                 throw new Exception($"Creating a book for author {authorId} failed on save");
             }
@@ -76,6 +76,29 @@ namespace Library.API.Controllers
             return CreatedAtRoute("GetBookForAuthor",
                 new { authorId = authorId, id = bookToReturn.Id },
                 bookToReturn);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBookForAuthor(Guid authorId,Guid id)
+        {
+            if (!_libraryRepository.AuthorExists(authorId))
+            {
+                return NotFound();
+            }
+
+            var bookForAuthorRepo = _libraryRepository.GetBookForAuthor(authorId, id);
+            if (bookForAuthorRepo==null)
+            {
+                return NotFound();
+            }
+            _libraryRepository.DeleteBook(bookForAuthorRepo);
+
+            if (!_libraryRepository.Save())
+            {
+                throw new Exception($"Deleting book {id} for author {authorId} failed on save");
+            }
+
+            return NoContent();
         }
     }
 }
