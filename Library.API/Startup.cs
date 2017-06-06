@@ -41,6 +41,7 @@ namespace Library.API
                 setupAction.ReturnHttpNotAcceptable = true;
                 //xml olarak format belirtlemek istiyorsak nuget ten aşağıdaki referans için paket indirmemiz gerekiyor
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
             });
         }
 
