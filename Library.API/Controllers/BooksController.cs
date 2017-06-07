@@ -123,8 +123,16 @@ namespace Library.API.Controllers
             //map
             Mapper.Map(book, bookForAuthorRepo);
             //apply update
-            _libraryRepository.UpdateBookForAuthor(bookForAuthorRepo)
-            //map back to entity
+            _libraryRepository.UpdateBookForAuthor(bookForAuthorRepo);
+
+            if (!_libraryRepository.Save())
+            {
+                throw new Exception($"Updating book {id} for author {authorId} failed on save");
+            }
+
+            return NoContent();
+
+            
 
         }
     }
