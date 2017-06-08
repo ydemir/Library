@@ -191,6 +191,7 @@ namespace Library.API.Controllers
             if (bookForAuthorFromRepo == null)
             {
                 var bookDto = new BookForUpdateDto();
+
                 patchDoc.ApplyTo(bookDto,ModelState);
 
                 if (bookDto.Description == bookDto.Title)
@@ -223,7 +224,9 @@ namespace Library.API.Controllers
             }
             var bookToPatch = Mapper.Map<BookForUpdateDto>(bookForAuthorFromRepo);
 
-            patchDoc.ApplyTo(bookToPatch,ModelState);
+            // patchDoc.ApplyTo(bookToPatch,ModelState);
+
+            patchDoc.ApplyTo(bookToPatch);
 
             if (bookToPatch.Description==bookToPatch.Title)
             {
