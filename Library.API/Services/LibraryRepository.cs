@@ -80,6 +80,7 @@ namespace Library.API.Services
 
         public void UpdateAuthor(Author author)
         {
+            //42 ve 43 video anlatıyor.
             // no code in this implementation
         }
 
@@ -97,6 +98,7 @@ namespace Library.API.Services
 
         public void UpdateBookForAuthor(Book book)
         {
+            //42 ve 43 video anlatıyor.
             // no code in this implementation
         }
 
