@@ -162,21 +162,38 @@ namespace Library.API.Controllers
             {
                 return NotFound();
             }
-            var booksForAuthorFromRepo = _libraryRepository.GetBookForAuthor(authorId, id);
+            var bookForAuthorFromRepo = _libraryRepository.GetBookForAuthor(authorId, id);
 
-            if (booksForAuthorFromRepo == null)
+            if (bookForAuthorFromRepo == null)
             {
-                return NotFound();
+                var bookDto = new BookForUpdateDto();
+                patchDoc.ApplyTo(bookDto);
+
+                var bookToAdd = Mapper.Map<Book>(bookDto);
+
+                bookToAdd.Id = id;
+
+                _libraryRepository.AddBookForAuthor(authorId, bookToAdd);
+                if (!_libraryRepository.Save())
+                {
+                    throw new Exception($"Upserting book {id} for author {authorId} failed on save.");
+                }
+
+                var bookToReturn = Mapper.Map<BookDto>(bookToAdd);
+
+                return CreatedAtRoute("GetBookForAuthor",
+                    new { authorId = authorId, id = bookToReturn.Id },
+                    bookToReturn);
             }
-            var bookToPatch = Mapper.Map<BookForUpdateDto>(booksForAuthorFromRepo);
+            var bookToPatch = Mapper.Map<BookForUpdateDto>(bookForAuthorFromRepo);
 
             patchDoc.ApplyTo(bookToPatch);
 
             //add validation
 
-            Mapper.Map(bookToPatch, booksForAuthorFromRepo);
+            Mapper.Map(bookToPatch, bookForAuthorFromRepo);
 
-            _libraryRepository.UpdateBookForAuthor(booksForAuthorFromRepo);
+            _libraryRepository.UpdateBookForAuthor(bookForAuthorFromRepo);
 
             if (!_libraryRepository.Save())
             {
