@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Library.API.Models;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Diagnostics;
+using NLog.Web;
+using NLog.Extensions.Logging;
 
 namespace Library.API
 {
@@ -23,6 +25,8 @@ namespace Library.API
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            env.ConfigureNLog("nlog.config");
             Configuration = builder.Build();
         }
 
@@ -52,7 +56,7 @@ namespace Library.API
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug(LogLevel.Information);
 
-            
+            loggerFactory.AddNLog();
 
             if (env.IsDevelopment())
             {

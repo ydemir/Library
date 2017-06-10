@@ -97,6 +97,7 @@ namespace Library.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteBookForAuthor(Guid authorId,Guid id)
         {
+
             if (!_libraryRepository.AuthorExists(authorId))
             {
                 return NotFound();
