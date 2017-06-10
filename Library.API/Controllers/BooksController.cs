@@ -7,6 +7,7 @@ using Library.API.Models;
 using Library.API.Entities;
 using Microsoft.AspNetCore.JsonPatch;
 using Library.API.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace Library.API.Controllers
 {
@@ -14,9 +15,11 @@ namespace Library.API.Controllers
     public class BooksController : Controller
     {
         private ILabraryRepository _libraryRepository;
+        private ILogger<BooksController> _logger;
 
-        public BooksController(ILabraryRepository libraryRepository)
+        public BooksController(ILabraryRepository libraryRepository, ILogger<BooksController> logger)
         {
+            _logger = logger;
             _libraryRepository = libraryRepository;
         }
         [HttpGet()]   
@@ -110,6 +113,7 @@ namespace Library.API.Controllers
             {
                 throw new Exception($"Deleting book {id} for author {authorId} failed on save");
             }
+            _logger.LogInformation(100, $"Book {id} for author {authorId} was deleted");
 
             return NoContent();
         }
